@@ -1,67 +1,46 @@
 .unified-dashboard {
     min-height: 100vh;
     background-color: #020617;
-    /* Deepest space blue */
     font-family: 'Exo 2', 'Roboto', sans-serif;
-    /* Tech feel if available, else Roboto */
+    padding: 0;
+    overflow-x: hidden;
 }
 
 .dashboard-content {
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 10px;
 }
 
-/* =========================================
-   SEARCH CONTROL PANEL (Top Bar)
-   ========================================= */
 .search-control-panel {
     max-width: 200px;
-    /* Constrain width for vertical list */
-
-    /* Fixed Positioning to place it lower down */
     position: fixed;
     top: 80px;
-    /* Adjusted to align with Motor Radar logo/header area */
     left: 20px;
     margin: 0;
-    /* Remove old margin */
-
     padding: 10px;
     background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
     border-radius: 16px;
     border: 1px solid rgba(56, 189, 248, 0.2);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5),
-        inset 0 0 20px rgba(56, 189, 248, 0.05);
-
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(56, 189, 248, 0.05);
     display: flex;
     flex-direction: column;
-    /* Vertical */
     align-items: stretch;
-    /* Full width buttons */
     gap: 12px;
-
     z-index: 100;
-    /* Ensure high z-index to stay on top */
 }
 
-/* Base Minimal Tech Button */
 .search-btn,
 .auto-search-btn,
 .ai-analyst-btn {
     position: relative;
     width: 100%;
-    /* Full width in panel */
     height: 36px;
-    /* Smaller height */
     padding: 0 12px;
     border-radius: 6px;
-    /* Subtle rounding */
     border: 1px solid rgba(148, 163, 184, 0.2);
-    /* Subtle dim border */
     background: rgba(15, 23, 42, 0.6);
-    /* Translucent dark */
     color: #94a3b8;
-    /* Dim text default */
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -70,15 +49,12 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    /* Align icon/text left */
     gap: 10px;
     box-shadow: none;
-    /* No shadow by default for minimal look */
     text-shadow: none;
     margin: 0;
 }
 
-/* Hover State - Slight Glow */
 .search-btn:hover,
 .auto-search-btn:hover,
 .ai-analyst-btn:hover {
@@ -87,10 +63,8 @@
     color: #e2e8f0;
     box-shadow: 0 0 10px rgba(139, 92, 246, 0.1);
     transform: none;
-    /* No movement */
 }
 
-/* Active/Primary State (e.g. current page or active auto) */
 .search-btn.active,
 .auto-search-btn.active,
 .ai-analyst-btn.active {
@@ -100,7 +74,6 @@
     box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
 }
 
-/* Specific: Auto Search Active Pulse (Subtle) */
 .auto-search-btn.active {
     border-color: #d946ef;
     color: #f0abfc;
@@ -123,7 +96,6 @@
     }
 }
 
-/* Remove old pseudo-elements / corner accents */
 .search-btn::before,
 .search-btn::after,
 .ai-analyst-btn::after,
@@ -131,9 +103,7 @@
     display: none;
 }
 
-/* AI Analyst Specific */
 .ai-analyst-btn {
-    /* Override gradient to match minimal style */
     background: rgba(15, 23, 42, 0.6) !important;
 }
 
@@ -143,15 +113,65 @@
     color: #7dd3fc;
 }
 
-/* Dashboard Specific Hover */
 .search-btn:hover {
     border-color: #38bdf8;
-    /* Cyan hover */
 }
 
+/* 📱 MOBILE OPTIMIZATION */
+@media (max-width: 768px) {
+    .unified-dashboard {
+        padding-bottom: 80px;
+    }
 
-/* Media Queries */
-@media (min-width: 768px) {
+    .dashboard-content {
+        padding: 5px;
+        margin-top: 10px;
+    }
+
+    .search-control-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px 8px;
+        gap: 6px;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+    }
+
+    .search-btn,
+    .auto-search-btn,
+    .ai-analyst-btn {
+        font-size: 10px;
+        padding: 6px 10px;
+        height: 32px;
+        flex: 1;
+        justify-content: center;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-control-panel {
+        padding: 8px 5px;
+        gap: 4px;
+    }
+
+    .search-btn,
+    .auto-search-btn,
+    .ai-analyst-btn {
+        font-size: 9px;
+        padding: 5px 8px;
+        height: 30px;
+    }
+}
+
+@media (min-width: 769px) {
     .last-search-time {
         display: inline-block;
         margin-left: 12px;
@@ -162,6 +182,5 @@
     .search-control-panel {
         overflow-x: visible;
         flex-wrap: nowrap;
-        /* Keep single line if possible */
     }
 }
