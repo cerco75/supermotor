@@ -1,0 +1,50 @@
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.badge-alert {
+    background-color: rgba(255, 68, 102, 0.1);
+    color: var(--motor-negative);
+    border: 1px solid var(--motor-negative);
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--motor-negative);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.badge-connected {
+    background-color: var(--solana-accent);
+    color: #000000;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-metric {
+    background-color: rgba(255, 68, 102, 0.9);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}

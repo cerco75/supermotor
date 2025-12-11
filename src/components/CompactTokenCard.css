@@ -1,0 +1,880 @@
+/* Cosmic Ticket Design - Replaces previous Neumorphic */
+
+.compact-token-card {
+    background: linear-gradient(135deg, #020617 0%, #1e1b4b 50%, #312e81 100%);
+    border-radius: 12px;
+    padding: 0;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    /* Border Glow */
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 200px;
+    /* Ensure enough height */
+}
+
+/* Background Texture/Stars Overlay */
+.compact-token-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255, 255, 255, .15) 1px, transparent 2px),
+        radial-gradient(white, rgba(255, 255, 255, .1) 2px, transparent 3px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+    opacity: 0.1;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Subtle Circuit overlay */
+.compact-token-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.card-main-content {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1.5fr;
+    padding: 24px;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+
+/* ================= LEFT SECTION ================= */
+.card-left-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.identity-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.token-symbol-large {
+    font-size: 32px;
+    font-weight: 900;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.token-name-sub {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-top: 4px;
+}
+
+.official-tag {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.qr-box {
+    width: 60px;
+    height: 60px;
+    background: white;
+    padding: 4px;
+    border-radius: 4px;
+    margin-top: auto;
+    /* Push to bottom of left section */
+}
+
+/* ================= CENTER SECTION ================= */
+.card-center-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.glowing-icon-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-token-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px #38bdf8);
+    /* Bright blue glow */
+}
+
+.center-token-fallback {
+    font-size: 40px;
+    font-weight: 900;
+    color: white;
+    z-index: 2;
+    text-shadow: 0 0 15px #38bdf8;
+}
+
+.glow-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%);
+    z-index: 1;
+    border-radius: 50%;
+    animation: pulse-glow 3s infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+/* ================= RIGHT SECTION ================= */
+.card-right-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    /* Right align as per image */
+}
+
+.price-header-ticket {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.ticket-price {
+    font-size: 36px;
+    font-weight: 800;
+    color: #4ade80;
+    /* Bright Green */
+    font-family: 'Roboto Mono', monospace;
+    text-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+}
+
+.ticket-change {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.ticket-change.pos {
+    background-color: #4ade80;
+    color: #020617;
+    /* Black text on green */
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.ticket-change.neg {
+    background-color: #ef4444;
+    color: white;
+}
+
+.ticket-stats-grid {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    width: 100%;
+    /* Create rows with borders */
+}
+
+.ticket-stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ticket-stat-row:last-child {
+    border-bottom: none;
+}
+
+.t-label {
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.t-value {
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* ================= FOOTER ================= */
+.card-footer-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+    color: #94a3b8;
+    z-index: 2;
+}
+
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #cbd5e1;
+}
+
+.status-dot.pre_ignition {
+    background-color: #f59e0b;
+    box-shadow: 0 0 5px #f59e0b;
+}
+
+.status-dot.micro_velocity {
+    background-color: #22c55e;
+    box-shadow: 0 0 5px #22c55e;
+}
+
+/* ================= OVERLAY ACTION ================= */
+.card-action-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s;
+    opacity: 0;
+}
+
+.compact-token-card:hover .card-action-overlay {
+    opacity: 1;
+}
+
+.card-action-overlay:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* ================= MOBILE RESPONSIVENESS ================= */
+@media (max-width: 768px) {
+    .card-main-content {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "center"
+            "right"
+            "left";
+        gap: 20px;
+        text-align: center;
+    }
+
+    .card-left-section {
+        grid-area: left;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .qr-box {
+        margin-top: 0;
+        width: 50px;
+        height: 50px;
+    }
+
+    .card-center-section {
+        grid-area: center;
+        margin-bottom: -10px;
+        /* Pull it tighter */
+    }
+
+    .card-right-section {
+        grid-area: right;
+        align-items: center;
+        width: 100%;
+    }
+
+    .price-header-ticket {
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+
+    .ticket-price {
+        font-size: 42px;
+    }
+
+    .ticket-stats-grid {
+        width: 100%;
+    }
+
+    .card-footer-strip {
+
+        /* ================= RIGHT SECTION ================= */
+        .card-right-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+            /* Right align as per image */
+        }
+
+        .price-header-ticket {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .ticket-price {
+            font-size: 36px;
+            font-weight: 800;
+            color: #4ade80;
+            /* Bright Green */
+            font-family: 'Roboto Mono', monospace;
+            text-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+        }
+
+        .ticket-change {
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .ticket-change.pos {
+            background-color: #4ade80;
+            color: #020617;
+            /* Black text on green */
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+
+        .ticket-change.neg {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .ticket-stats-grid {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            width: 100%;
+            /* Create rows with borders */
+        }
+
+        .ticket-stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ticket-stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .t-label {
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .t-value {
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* ================= FOOTER ================= */
+        .card-footer-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 24px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            color: #94a3b8;
+            z-index: 2;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #cbd5e1;
+        }
+
+        .status-dot.pre_ignition {
+            background-color: #f59e0b;
+            box-shadow: 0 0 5px #f59e0b;
+        }
+
+        .status-dot.micro_velocity {
+            background-color: #22c55e;
+            box-shadow: 0 0 5px #22c55e;
+        }
+
+        /* ================= OVERLAY ACTION ================= */
+        .card-action-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s;
+            opacity: 0;
+        }
+
+        .compact-token-card:hover .card-action-overlay {
+            opacity: 1;
+        }
+
+        .card-action-overlay:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* ================= MOBILE RESPONSIVENESS ================= */
+        @media (max-width: 768px) {
+            .card-main-content {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "center"
+                    "right"
+                    "left";
+                gap: 20px;
+                text-align: center;
+            }
+
+            .card-left-section {
+                grid-area: left;
+                flex-direction: row;
+                width: 100%;
+                align-items: center;
+                justify-content: space-between;
+                text-align: left;
+            }
+
+            .qr-box {
+                margin-top: 0;
+                width: 50px;
+                height: 50px;
+            }
+
+            .card-center-section {
+                grid-area: center;
+                margin-bottom: -10px;
+                /* Pull it tighter */
+            }
+
+            .card-right-section {
+                grid-area: right;
+                align-items: center;
+                width: 100%;
+            }
+
+            .price-header-ticket {
+                flex-direction: column;
+                gap: 4px;
+                margin-bottom: 12px;
+            }
+
+            .ticket-price {
+                font-size: 42px;
+            }
+
+            .ticket-stats-grid {
+                width: 100%;
+            }
+
+            .card-footer-strip {
+                padding: 8px 16px;
+                font-size: 10px;
+            }
+        }
+
+        /* AI Active State - Flip Effect */
+        .compact-token-card {
+            background: rgba(26, 27, 38, 0.95);
+            /* Darker opaque background */
+            border-radius: 16px;
+            padding: 12px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 280px;
+
+            /* Neon Blue Border Style */
+            border: 1px solid #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2), inset 0 0 10px rgba(56, 189, 248, 0.05);
+        }
+
+        .compact-token-card.ai-active {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border: 1px solid #38bdf8;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+        }
+
+        .ai-analysis-view {
+            padding: 24px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            position: relative;
+            /* Ensure it takes full card space */
+            min-height: 220px;
+            /* Same as card min height */
+        }
+
+        /* Header */
+        .ai-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+            padding-bottom: 12px;
+        }
+
+        .ai-brain-icon {
+            font-size: 24px;
+            filter: drop-shadow(0 0 5px #38bdf8);
+        }
+
+        .ai-header h3 {
+            margin: 0;
+            color: #38bdf8;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        .close-ai-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-ai-btn:hover {
+            color: white;
+        }
+
+        /* Content */
+        .ai-content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            padding-right: 8px;
+            /* Scrollbar space */
+            scrollbar-width: thin;
+            scrollbar-color: #1e293b transparent;
+        }
+
+        .ai-text-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ai-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            color: #e2e8f0;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .ai-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            height: 100%;
+            min-height: 100px;
+        }
+
+        .spinner-small {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .ai-loading span {
+            font-size: 12px;
+            color: #38bdf8;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Footer Status */
+        .ai-footer-actions {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .ai-status {
+            font-size: 10px;
+            color: #64748b;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Scrollbar Style */
+        .ai-content-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ai-content-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(56, 189, 248, 0.3);
+            border-radius: 4px;
+        }
+
+
+        /* Date Display Replacement for QR */
+        .qr-box.date-display {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 6px;
+            padding: 2px;
+        }
+
+        .date-label {
+            font-size: 8px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .date-value {
+            font-size: 11px;
+            font-weight: 700;
+            color: #e2e8f0;
+            font-family: 'Roboto Mono', monospace;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* ================= BACK TO TOKEN BUTTON ================= */
+        .back-to-token-btn {
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-to-token-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        }
+
+        .back-to-token-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Update footer to space between button and status */
+        .ai-footer-actions {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ================= GEMINI AI ANALYSIS BLOCK ================= */
+        .gemini-analysis-block {
+            margin-top: 24px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .gemini-header {
+            color: #a78bfa;
+            font-size: 14px;
+            font-weight: 800;
+            margin: 0 0 12px 0;
+            text-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .gemini-recommendation,
+        .gemini-timing,
+        .gemini-reasoning,
+        .gemini-trend {
+            font-size: 12px;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .gemini-recommendation strong,
+        .gemini-timing strong,
+        .gemini-reasoning strong,
+        .gemini-trend strong {
+            color: #a78bfa;
+            font-weight: 700;
+        }
+
+        .confidence {
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .gemini-points {
+            margin-top: 12px;
+            font-size: 12px;
+        }
+
+        .gemini-points strong {
+            color: #a78bfa;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .gemini-points ul {
+            margin: 0;
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        .gemini-points li {
+            color: #cbd5e1;
+            margin-bottom: 4px;
+            position: relative;
+            padding-left: 12px;
+        }
+
+        .gemini-points li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #a78bfa;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .back-to-token-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .gemini-analysis-block {
+                padding: 12px;
+            }
+
+            .gemini-header {
+                font-size: 13px;
+            }
+
+            .gemini-recommendation,
+            .gemini-timing,
+            .gemini-reasoning,
+            .gemini-trend,
+            .gemini-points {
+                font-size: 11px;
+            }
+        } 
+ 

@@ -1,0 +1,80 @@
+/* Custom Square Header for Motor Radar Section */
+.motor-custom-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    position: relative;
+    width: 100%;
+}
+
+.square-logo-container {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+/* The main outer square frame simulation with SVG background */
+.square-frame-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Inner content area */
+.motor-title-content {
+    z-index: 10;
+    text-align: center;
+}
+
+.motor-radar-title {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #a5f3fc;
+    /* Light Cyan */
+    text-shadow: 0 0 15px rgba(165, 243, 252, 0.4);
+    margin: 0;
+}
+
+/* Status Line */
+.motor-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Courier New', monospace;
+    color: #94a3b8;
+    /* Slate 400 */
+    font-size: 14px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+
+.status-icon-shield {
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+/* Animations for the SVG paths if desired */
+.path-anim {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: dash 5s linear alternate infinite;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}

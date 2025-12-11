@@ -1,0 +1,167 @@
+.unified-dashboard {
+    min-height: 100vh;
+    background-color: #020617;
+    /* Deepest space blue */
+    font-family: 'Exo 2', 'Roboto', sans-serif;
+    /* Tech feel if available, else Roboto */
+}
+
+.dashboard-content {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* =========================================
+   SEARCH CONTROL PANEL (Top Bar)
+   ========================================= */
+.search-control-panel {
+    max-width: 200px;
+    /* Constrain width for vertical list */
+
+    /* Fixed Positioning to place it lower down */
+    position: fixed;
+    top: 80px;
+    /* Adjusted to align with Motor Radar logo/header area */
+    left: 20px;
+    margin: 0;
+    /* Remove old margin */
+
+    padding: 10px;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5),
+        inset 0 0 20px rgba(56, 189, 248, 0.05);
+
+    display: flex;
+    flex-direction: column;
+    /* Vertical */
+    align-items: stretch;
+    /* Full width buttons */
+    gap: 12px;
+
+    z-index: 100;
+    /* Ensure high z-index to stay on top */
+}
+
+/* Base Minimal Tech Button */
+.search-btn,
+.auto-search-btn,
+.ai-analyst-btn {
+    position: relative;
+    width: 100%;
+    /* Full width in panel */
+    height: 36px;
+    /* Smaller height */
+    padding: 0 12px;
+    border-radius: 6px;
+    /* Subtle rounding */
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    /* Subtle dim border */
+    background: rgba(15, 23, 42, 0.6);
+    /* Translucent dark */
+    color: #94a3b8;
+    /* Dim text default */
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align icon/text left */
+    gap: 10px;
+    box-shadow: none;
+    /* No shadow by default for minimal look */
+    text-shadow: none;
+    margin: 0;
+}
+
+/* Hover State - Slight Glow */
+.search-btn:hover,
+.auto-search-btn:hover,
+.ai-analyst-btn:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(139, 92, 246, 0.5);
+    color: #e2e8f0;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.1);
+    transform: none;
+    /* No movement */
+}
+
+/* Active/Primary State (e.g. current page or active auto) */
+.search-btn.active,
+.auto-search-btn.active,
+.ai-analyst-btn.active {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: #8b5cf6;
+    color: #c4b5fd;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+}
+
+/* Specific: Auto Search Active Pulse (Subtle) */
+.auto-search-btn.active {
+    border-color: #d946ef;
+    color: #f0abfc;
+    background: rgba(217, 70, 239, 0.1);
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.2);
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0% {
+        border-color: rgba(217, 70, 239, 0.4);
+    }
+
+    50% {
+        border-color: rgba(217, 70, 239, 0.8);
+    }
+
+    100% {
+        border-color: rgba(217, 70, 239, 0.4);
+    }
+}
+
+/* Remove old pseudo-elements / corner accents */
+.search-btn::before,
+.search-btn::after,
+.ai-analyst-btn::after,
+.ai-analyst-btn::before {
+    display: none;
+}
+
+/* AI Analyst Specific */
+.ai-analyst-btn {
+    /* Override gradient to match minimal style */
+    background: rgba(15, 23, 42, 0.6) !important;
+}
+
+.ai-analyst-btn:hover {
+    background: rgba(56, 189, 248, 0.1) !important;
+    border-color: #38bdf8;
+    color: #7dd3fc;
+}
+
+/* Dashboard Specific Hover */
+.search-btn:hover {
+    border-color: #38bdf8;
+    /* Cyan hover */
+}
+
+
+/* Media Queries */
+@media (min-width: 768px) {
+    .last-search-time {
+        display: inline-block;
+        margin-left: 12px;
+        color: #94a3b8;
+        font-family: monospace;
+    }
+
+    .search-control-panel {
+        overflow-x: visible;
+        flex-wrap: nowrap;
+        /* Keep single line if possible */
+    }
+}

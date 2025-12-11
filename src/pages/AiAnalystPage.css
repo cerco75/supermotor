@@ -1,0 +1,366 @@
+.ai-analyst-page {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Education Block */
+.education-block {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    padding: 24px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border: 1px solid #4c1d95;
+    max-height: 400px;
+    /* Limitar altura máxima */
+    overflow-y: auto;
+    /* Scroll si es necesario */
+}
+
+.education-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.education-block h3 {
+    color: #e9d5ff;
+    margin: 0;
+    font-size: 18px;
+}
+
+.close-education-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e9d5ff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s ease;
+}
+
+.close-education-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.education-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.education-item {
+    display: flex;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.education-icon {
+    font-size: 24px;
+    min-width: 40px;
+}
+
+.education-item h4 {
+    color: #c4b5fd;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.education-item p {
+    color: #d8b4fe;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Strategies Grid */
+.strategies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 24px;
+}
+
+.strategy-card {
+    background: #1f2937;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #374151;
+    transition: all 0.3s ease;
+}
+
+.strategy-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+}
+
+/* Header */
+.strategy-header {
+    margin-bottom: 16px;
+}
+
+.strategy-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.strategy-title h3 {
+    color: #f3f4f6;
+    font-size: 20px;
+    margin: 0;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+}
+
+.strategy-meta {
+    display: flex;
+    gap: 8px;
+}
+
+.horizon-badge,
+.direction-badge {
+    background: #374151;
+    color: #9ca3af;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+/* Trend Indicator */
+.trend-indicator {
+    background: rgba(168, 85, 247, 0.1);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.trend-label {
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.trend-value {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.trend-score {
+    background: #374151;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+/* Cause */
+.strategy-cause {
+    background: #111827;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    color: #d1d5db;
+    font-size: 13px;
+}
+
+/* Entry Zones */
+.entry-zones {
+    margin-bottom: 16px;
+}
+
+.entry-zones h4 {
+    color: #e5e7eb;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.zone-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.zone-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #111827;
+    border-radius: 6px;
+}
+
+.zone-label {
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.zone-value {
+    color: #f3f4f6;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.pullback-zone {
+    border: 2px solid #f59e0b;
+}
+
+/* Risk Management */
+.risk-management {
+    margin-bottom: 16px;
+}
+
+.risk-management h4 {
+    color: #e5e7eb;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.risk-item {
+    background: #111827;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.risk-label {
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+.risk-value {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.risk-value.sl {
+    color: #ef4444;
+}
+
+.risk-value.tp {
+    color: #22c55e;
+}
+
+.risk-value.rr {
+    color: #3b82f6;
+}
+
+/* Execution Note */
+.execution-note {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.execution-note strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #1f2937;
+}
+
+.execution-note p {
+    margin: 0;
+    color: #374151;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Latency Warning */
+.latency-warning {
+    padding: 8px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 4px;
+    border-left: 3px solid #3b82f6;
+}
+
+.latency-warning small {
+    color: #93c5fd;
+    font-size: 11px;
+}
+
+/* Loading/Empty States */
+.loading-state,
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+}
+
+.empty-state {
+    background: rgba(26, 27, 38, 0.8);
+    border-radius: 12px;
+
+    /* Neon Blue Border Style */
+    border: 1px solid #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2), inset 0 0 10px rgba(56, 189, 248, 0.05);
+
+    padding: 80px 40px;
+}
+
+.empty-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: #e5e7eb;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    color: #9ca3af;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.empty-hint {
+    color: #a855f7 !important;
+    font-weight: 500;
+    margin-top: 16px !important;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 16px;
+    border: 3px solid #374151;
+    border-top-color: #a855f7;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

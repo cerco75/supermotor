@@ -1,0 +1,174 @@
+/* Custom Hex Header for Solana Section */
+.solana-custom-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    position: relative;
+    width: 100%;
+}
+
+.hex-logo-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+/* Outer Hexagon Shape using clip-path */
+.hex-outer-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 2px solid rgba(244, 114, 182, 0.5);
+    /* Pinkish outer */
+    /* Approximating hexagon with CSS mask or SVG is better, but clip-path works for shape */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.1), rgba(56, 189, 248, 0.1));
+    z-index: 1;
+}
+
+/* Make the border visible by using a pseudo element or nested approach for clip-path borders */
+.hex-outer-ring::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, #f472b6, #38bdf8, #c084fc);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: -1;
+    margin: -2px;
+    /* Border width simulation */
+}
+
+/* Inner Ring - slightly smaller */
+.hex-inner-ring {
+    position: relative;
+    width: 85%;
+    height: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.8);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: 2;
+    box-shadow: inset 0 0 20px rgba(192, 132, 252, 0.2);
+}
+
+/* Border for Inner Ring */
+.hex-inner-ring::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: inset 0 0 0 2px rgba(192, 132, 252, 0.4);
+    /* Purple inner border */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    pointer-events: none;
+}
+
+.hex-content {
+    text-align: center;
+    z-index: 10;
+}
+
+.solana-lite-title {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    color: #f9a8d4;
+    /* Light pink */
+    text-shadow: 0 0 10px rgba(249, 168, 212, 0.5);
+    margin: 0;
+}
+
+.lite-text {
+    font-size: 48px;
+    color: #f9a8d4;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Tech Decorations - Lines and dots */
+.tech-decor {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.tech-decor.top-left::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: -10px;
+    width: 20px;
+    height: 2px;
+    background: #38bdf8;
+    box-shadow: 0 0 5px #38bdf8;
+}
+
+.tech-decor.top-left::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: -14px;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+.tech-decor.bottom-right::before {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: -10px;
+    width: 20px;
+    height: 2px;
+    background: #f472b6;
+    box-shadow: 0 0 5px #f472b6;
+}
+
+.tech-decor.bottom-right::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: -14px;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+/* Chain Status Line */
+.solana-chain-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Courier New', monospace;
+    color: #94a3b8;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.status-icon {
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+.status-label {
+    letter-spacing: 1px;
+}
