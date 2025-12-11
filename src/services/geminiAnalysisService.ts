@@ -22,7 +22,7 @@ export interface GeminiTokenAnalysis {
 class GeminiAnalysisService {
     // 🔑 Gemini API Key configured
     private apiKey: string = 'AIzaSyDpTWYF8K6TTAKJeaEC6nhoRBmNIvt5SUg';
-    private apiEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+    private apiEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
     private requestCount = 0;
     private lastResetTime = Date.now();
     private readonly MAX_REQUESTS_PER_DAY = 1500;
