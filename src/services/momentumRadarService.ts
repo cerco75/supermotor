@@ -933,12 +933,16 @@ class CryptoComMomentumRadar {
 
 
                 // 🤖 UPDATE AI ANALYSIS
-                // Re-analyze on every cycle to get fresh Gemini insights
+                // Only re-analyze with Gemini if we don't have Gemini data yet
                 const priceDiff = Math.abs((coin.price - track.lastSeenPrice) / track.lastSeenPrice);
 
-                // Always re-analyze to get fresh AI insights (including Gemini)
-                console.log(`🦁🔄 Re-analizando ${coin.symbol} (cambio de precio: ${(priceDiff * 100).toFixed(2)}%)`);
-                track.aiData = aiAdvisorService.analyzeToken(coin);
+                // Only call Gemini if we don't have analysis yet (to avoid 429 rate limits)
+                if (!track.aiData?.geminiAnalysis) {
+                    console.log(`🦁🔄 Re-analizando ${coin.symbol} (SIN análisis Gemini previo)`);
+                    track.aiData = await aiAdvisorService.analyzeToken(coin);
+                } else {
+                    console.log(`🦁✓ ${coin.symbol} ya tiene análisis Gemini, saltando re-análisis`);
+                }
 
                 // Log AI Analysis Result
                 if (track.aiData?.isMatch) {
