@@ -3,6 +3,7 @@ import { telegramService } from './api/telegramService';
 import { addDashboardAlert } from './alertStore';
 import { cdcBackgroundRunner } from './cdcBackgroundRunner';
 import { lunarCrushService } from './lunarCrushService';
+import { aiAdvisorService } from './aiAdvisorService';
 import { App } from '@capacitor/app';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { Preferences } from '@capacitor/preferences';
@@ -159,7 +160,6 @@ interface PersistenceTrack {
 }
 
 import { markovService, MarketState } from './markovService';
-import { aiAdvisorService } from './aiAdvisorService';
 
 /**
  * CRYPTO.COM MOMENTUM RADAR ENGINE v3 (Dual Engine)
@@ -802,7 +802,7 @@ class CryptoComMomentumRadar {
     }
 
 
-    private processPersistence(currentCandidates: any[]) {
+    private async processPersistence(currentCandidates: any[]) {
         const currentSymbols = new Set(currentCandidates.map(c => c.symbol));
 
         // 1. Check existing tracked tokens
@@ -832,14 +832,18 @@ class CryptoComMomentumRadar {
             }
         });
 
+
         // 2. Update or Add new
-        currentCandidates.forEach(coin => {
+        for (const coin of currentCandidates) {
             if (!this.tracking[coin.symbol]) {
                 // NEW
                 const strategyId = coin.strategyId === 'micro_velocity' ? 'micro_velocity' : 'standard';
                 const strategyLabel = strategyId === 'micro_velocity' ? 'MICRO' : 'STD';
 
                 console.log(`🦁🆕 ${coin.symbol} [${strategyLabel}] entra al radar ✅`);
+
+                // 🤖 AI ANALYSIS (AWAIT for Gemini)
+                const aiData = await aiAdvisorService.analyzeToken(coin);
 
                 const newTrack: PersistenceTrack = {
                     symbol: coin.symbol,
@@ -864,8 +868,7 @@ class CryptoComMomentumRadar {
                     score: coin.raw?.preIgnitionScore || 0, // 🆕 Score
                     contractAddress: coin.raw?.baseToken?.address || coin.raw?.contract_address, // 🆕 CA
                     lastUpdated: Date.now(), // 🆕 Init TTL
-                    // 🤖 AI ANALYSIS
-                    aiData: aiAdvisorService.analyzeToken(coin)
+                    aiData // ✅ Now includes Gemini analysis!
                 };
 
                 // Log AI Analysis Result
@@ -983,7 +986,7 @@ class CryptoComMomentumRadar {
                 console.log(`🦁✅ ${coin.symbol} PERSISTE hora ${track.consecutiveHours}`);
                 this.triggerAlerts(coin, track);
             }
-        });
+        }
     }
 
     private triggerAlerts(coin: any, track: PersistenceTrack) {

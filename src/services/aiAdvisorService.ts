@@ -201,8 +201,9 @@ class AiAdvisorService {
     /**
      * 🎯 ANALYZE TOKEN (Entry Point)
      * Now generates full strategy if token passes validation
+     * ASYNC: Waits for Gemini AI analysis
      */
-    public analyzeToken(token: any): AiAnalysisResult {
+    public async analyzeToken(token: any): Promise<AiAnalysisResult> {
         console.log(`🎯 AI Advisor analyzing: ${token.symbol || 'UNKNOWN'}`);
 
         // Support both CoinGecko format and internal radar format
@@ -287,20 +288,21 @@ class AiAdvisorService {
             strategy = this.generateTradingStrategy(token);
         }
 
-        // 🤖 OPTIONAL: Trigger Gemini AI analysis in background (non-blocking)
-        // This will enhance the analysis with AI insights about timing
+        // 🤖 AWAIT Gemini AI analysis (now blocking to include in result)
         console.log(`🔍 Triggering Gemini analysis for ${token.symbol}...`);
-        this.analyzeWithGemini(token).then(geminiResult => {
-            if (geminiResult) {
-                console.log(`🤖 Gemini AI: ${token.symbol} - ${geminiResult.recommendation} (${geminiResult.confidence}% confidence)`);
-                console.log(`   Timing: ${geminiResult.entryTiming}, Risk: ${geminiResult.priceAnalysis.riskLevel}`);
-                console.log(`   Reasoning: ${geminiResult.reasoning}`);
+        let geminiAnalysis: GeminiTokenAnalysis | undefined;
+        try {
+            geminiAnalysis = await this.analyzeWithGemini(token);
+            if (geminiAnalysis) {
+                console.log(`🤖 Gemini AI: ${token.symbol} - ${geminiAnalysis.recommendation} (${geminiAnalysis.confidence}% confidence)`);
+                console.log(`   Timing: ${geminiAnalysis.entryTiming}, Risk: ${geminiAnalysis.priceAnalysis.riskLevel}`);
+                console.log(`   Reasoning: ${geminiAnalysis.reasoning}`);
             } else {
                 console.log(`⚠️ Gemini returned null for ${token.symbol}`);
             }
-        }).catch(err => {
+        } catch (err) {
             console.error('❌ Gemini analysis failed (non-critical):', err);
-        });
+        }
 
         return {
             score,
@@ -308,8 +310,8 @@ class AiAdvisorService {
             reason,
             flags,
             timestamp: Date.now(),
-            strategy
-            // geminiAnalysis will be added later via async update
+            strategy,
+            geminiAnalysis // ✅ Now included in the result!
         };
     }
 
