@@ -1,0 +1,164 @@
+.turbo-hunter-page {
+    padding: 24px;
+    background-color: #0b0e14;
+    /* Darker than slate, Binance-like */
+    min-height: 100vh;
+    color: #eaecef;
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    /* Monospace for numbers */
+}
+
+.turbo-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #2b3139;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.turbo-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fcd535;
+    /* Binance Yellow */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.turbo-status {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #0ecb81;
+    /* Binance Green */
+    border-radius: 50%;
+    box-shadow: 0 0 8px #0ecb81;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.turbo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.turbo-card {
+    background-color: #1e2329;
+    border: 1px solid #2b3139;
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.turbo-card:hover {
+    transform: translateY(-2px);
+    border-color: #474d57;
+}
+
+.turbo-card.signal-bullish {
+    border-color: #0ecb81;
+    box-shadow: 0 0 15px rgba(14, 203, 129, 0.1);
+}
+
+.turbo-card.signal-bearish {
+    border-color: #f6465d;
+    box-shadow: 0 0 15px rgba(246, 70, 93, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.token-pair {
+    font-size: 18px;
+    font-weight: 700;
+    color: #eaecef;
+}
+
+.token-price {
+    font-size: 16px;
+    color: #fcd535;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.tech-item {
+    background: #2b3139;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.tech-label {
+    font-size: 10px;
+    color: #848e9c;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.tech-value {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.text-green {
+    color: #0ecb81;
+}
+
+.text-red {
+    color: #f6465d;
+}
+
+.text-neutral {
+    color: #848e9c;
+}
+
+.signal-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.badge-buy {
+    background: rgba(14, 203, 129, 0.2);
+    color: #0ecb81;
+}
+
+.badge-sell {
+    background: rgba(246, 70, 93, 0.2);
+    color: #f6465d;
+}

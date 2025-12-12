@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import './CompactTokenCard.css';
-import techIcon from '../assets/cyberpunk_chip_icon.png';
 import { momentumRadarService } from '../services/momentumRadarService';
+import { AiAnalysisResult } from '../services/aiAdvisorService';
 
 interface CompactTokenCardProps {
     token: {
@@ -19,6 +19,7 @@ interface CompactTokenCardProps {
         score?: number;
         strategyId: string;
         tradeUrl?: string;
+        aiData?: AiAnalysisResult;
     };
     onAskAI?: (symbol: string) => void;
     aiAnalysis?: string;
@@ -188,7 +189,7 @@ export const CompactTokenCard: React.FC<CompactTokenCardProps> = ({ token, onAsk
                     </div>
 
                     <div className="qr-box">
-                        <img src={techIcon} alt="Tech" className="tech-icon" />
+                        <div className="tech-icon">💎</div>
                     </div>
                 </div>
 

@@ -50,53 +50,53 @@ const COMMON_EXCLUDED_MAJORS = [
 ];
 
 
-// 1. STANDARD CONFIG (Original) - ULTRA RELAXED FOR SOLANA
+// 1. STANDARD CONFIG (Intermediate) - BALANCED RELIABILITY
 const STANDARD_CONFIG: RadarConfig = {
     id: 'standard',
-    minMarketCap: 50_000,     // Lowered to 50k for ultra-early Solana gems
-    maxMarketCap: 500_000_000,
-    minVolume24h: 2_000,      // Very low threshold - catch early movement
-    minChange1h: -10,         // Allow negative (accumulation phase)
-    minChange24h: -20,        // Allow significant dips (buy opportunities)
+    minMarketCap: 1_000_000,   // Increased to $1M (Filter out trash)
+    maxMarketCap: 1_000_000_000,
+    minVolume24h: 50_000,      // Minimum $50k daily volume (Liquidity check)
+    minChange1h: -2.0,         // Allow slight pullbacks only
+    minChange24h: 0.0,         // Trend must be positive (Green day)
 
-    // Strategy Dual (Standard / Early Riser) - RELAXED
-    stdMinChange1h: 0.5,      // Reduced from 2.0 - catch subtle movement
-    stdMinChange24h: 1.0,     // Reduced from 5.0 - early detection
-    earlyMinChange1h: 1.0,    // Reduced from 3.5
-    earlyMaxChange24h: 10.0,  // Increased from 5.0 - allow more range
-    earlyMinChange24h: -20.0, // More permissive
+    // Strategy Dual (Standard / Early Riser) - BALANCED
+    stdMinChange1h: 1.5,       // Require 1.5% hourly pop
+    stdMinChange24h: 3.0,      // Require 3% daily gain
+    earlyMinChange1h: 2.5,     // Stronger hourly for early
+    earlyMaxChange24h: 15.0,   // Cap at 15% (avoid chased pumps)
+    earlyMinChange24h: -5.0,   // Allow recovery plays
 
-    minVolumeToMcapRatio: 0.03, // Reduced from 0.10 to 3% - more permissive
+    minVolumeToMcapRatio: 0.05, // 5% ratio (Active trading required)
     excludedMajors: COMMON_EXCLUDED_MAJORS,
-    requireMomentumAcceleration: false, // Disabled for Solana - too restrictive
-    momentumDecayTolerance: 0.5,
-    topGainersLimit: 100      // Increased to see more candidates
+    requireMomentumAcceleration: true, // Re-enable acceleration check
+    momentumDecayTolerance: 0.3,
+    topGainersLimit: 50        // Focus on Top 50 quality, not 100 noise
 };
 
-// 2. MICRO VELOCITY CONFIG (New Rule Set) - SOLANA OPTIMIZED
+// 2. MICRO VELOCITY CONFIG (High Risk/High Reward) - FILTERED
 const MICRO_CONFIG: RadarConfig = {
     id: 'micro_velocity',
-    minMarketCap: 500_000,    // Reduced from 3M - catch smaller caps
-    maxMarketCap: 50_000_000, // Increased from 30M
-    minVolume24h: 1_000,      // Reduced from 5k - very sensitive
-    minChange1h: -5,          // Allow dips (from 1.5)
-    minChange24h: -10,        // Allow consolidation (from 3.0)
-    minVolumeToMcapRatio: 0.02, // Reduced from 0.08 to 2%
-    excludedMajors: COMMON_EXCLUDED_MAJORS,
-    topGainersLimit: 100
-};
-
-// 3. ACCUMULATION CONFIG (New - Whale Accumulation Detection) - SOLANA OPTIMIZED
-const ACCUMULATION_CONFIG: RadarConfig = {
-    id: 'accumulation',
-    minMarketCap: 100_000,    // Reduced from 1M - catch micro gems
-    maxMarketCap: 100_000_000, // Increased from 50M
-    minVolume24h: 1_000,      // Reduced from 10k - catch early activity
-    minChange1h: -15,         // More permissive (from -5)
-    minChange24h: -30,        // More permissive (from -10) - catch deep dips
-    minVolumeToMcapRatio: 0.01, // Reduced from 0.05 to 1% - very permissive
+    minMarketCap: 250_000,    // Min $250k (Avoid absolute micro-dust)
+    maxMarketCap: 10_000_000, // Up to $10M
+    minVolume24h: 25_000,     // Min $25k volume (Must be tradable)
+    minChange1h: 1.0,         // Positive momentum required
+    minChange24h: -5.0,       // No crashing tokens
+    minVolumeToMcapRatio: 0.10, // 10% Ratio - HIGH VELOCITY ONLY
     excludedMajors: COMMON_EXCLUDED_MAJORS,
     topGainersLimit: 50
+};
+
+// 3. ACCUMULATION CONFIG (Quiet Before Storm) - SMART MONEY
+const ACCUMULATION_CONFIG: RadarConfig = {
+    id: 'accumulation',
+    minMarketCap: 500_000,    // Min $500k
+    maxMarketCap: 50_000_000,
+    minVolume24h: 15_000,     // Moderate liquidity
+    minChange1h: -5.0,        // Consolidation
+    minChange24h: -12.0,      // Buy the dip (max -12%)
+    minVolumeToMcapRatio: 0.03, // 3% turnover implies subtle interest
+    excludedMajors: COMMON_EXCLUDED_MAJORS,
+    topGainersLimit: 30
 };
 
 
@@ -150,13 +150,7 @@ interface PersistenceTrack {
     contractAddress?: string; // 🆕 CA
     lastUpdated?: number;    // 🆕 TTL Tracking
     lastHistoryUpdate?: number; // 🆕 To control history frequency
-    aiData?: {               // 🆕 AI Advisor Data (full result from aiAdvisorService)
-        score: number;
-        isMatch: boolean;
-        reason: string;
-        timestamp: number;
-        strategy?: import('./aiAdvisorService').TradingStrategy;
-    };
+    aiData?: import('./aiAdvisorService').AiAnalysisResult; // 🆕 AI Advisor Data (includes geminiAnalysis)
 }
 
 import { markovService, MarketState } from './markovService';

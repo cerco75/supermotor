@@ -191,6 +191,28 @@ export class CoinGeckoClient {
         }
     }
 
+    /**
+     * 🕯️ FETCH OHLC CANDLES (Standard Free Tier)
+     * days=1 gives 30min granularity (approx 48 candles)
+     * Limit: 30 calls/min approx
+     */
+    async fetchOHLC(coinId: string, days: number = 1): Promise<number[][]> {
+        try {
+            await this.delay(1000); // Rate limit safety
+            const response = await fetch(`${COINGECKO_BASE_URL}/coins/${coinId}/ohlc?vs_currency=usd&days=${days}`);
+            if (!response.ok) {
+                if (response.status === 429) console.warn(`⏳ OHLC 429 for ${coinId}`);
+                return [];
+            }
+            const data = await response.json();
+            // returns [ [time, open, high, low, close], ... ]
+            return Array.isArray(data) ? data : [];
+        } catch (e) {
+            console.error(`Error fetching OHLC for ${coinId}:`, e);
+            return [];
+        }
+    }
+
     private delay(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

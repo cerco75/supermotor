@@ -48,7 +48,7 @@ export interface AiAnalysisResult {
     timestamp: number;
     strategy?: TradingStrategy;
     geminiAnalysis?: GeminiTokenAnalysis; // 🆕 Gemini AI insights
-    openAIAnalysis?: OpenAITokenAnalysis; // 🆕 OpenAI GPT-4 insights
+    openAIAnalysis?: OpenAITokenAnalysis | null; // 🆕 OpenAI GPT-4 insights
 }
 
 class AiAdvisorService {
@@ -240,33 +240,31 @@ class AiAdvisorService {
 
         // 🆕 FRESHNESS CHECK (Critical Anti-Late-Entry Filter)
         // Reject tokens that already pumped significantly in 24h
-        // RELAXED FOR SOLANA: 25% threshold instead of 15%
-        if (priceChange24h > 25) {
-            score -= 60;
-            flags.push('ALREADY_PUMPED_24H');
-        } else if (priceChange24h > 15) {
-            score -= 20; // Reduced penalty from 30
-            flags.push('LATE_ENTRY_RISK');
+        // STRICT MODE RESTORED: 15% hard limit to prevent FOMO
+        if (priceChange24h > 15) {
+            score -= 40; // Heavy penalty for late entry
+            flags.push('ALREADY_PUMPED_15%');
         }
 
         // Price Stability
         if (priceChange1h > 100) {
-            score -= 20;
+            score -= 30; // Increased penalty
             flags.push('VOLATILE_PUMP');
-        } else if (priceChange1h < -20) {
+        } else if (priceChange1h < -5) {
+            // STRICT: Even small dumps are penalized now
             score -= 50;
             flags.push('DUMPING_NOW');
-        } else if (priceChange1h > 5 && priceChange1h < 30) {
-            score += 20;
+        } else if (priceChange1h > 5 && priceChange1h < 20) {
+            score += 20; // Sweet spot for organic growth
         }
 
         // Trend Consistency
-        if (priceChange1h > 0 && priceChange24h < -20) {
-            score -= 10;
+        if (priceChange1h > 0 && priceChange24h < 0) {
+            score -= 20; // Stricter penalty for dead cat bounce
             flags.push('DEAD_CAT_BOUNCE');
         }
-        if (priceChange1h > 0 && priceChange24h > 0 && priceChange24h < 10) {
-            score += 15; // Healthy uptrend, but not too late
+        if (priceChange1h > 0 && priceChange24h > 0 && priceChange24h < 15) {
+            score += 20; // Perfect setup: Green day but early (<15%)
         }
 
         // Whale Signal
@@ -276,11 +274,11 @@ class AiAdvisorService {
 
         score = Math.min(100, Math.max(0, score));
 
-        // LOWERED THRESHOLD: 60 instead of 75 for Solana
-        const isMatch = score >= 60 && !flags.includes('DUMPING_NOW');
+        // HIGH THRESHOLD: 75/100 required for AI Approval
+        const isMatch = score >= 75 && !flags.includes('DUMPING_NOW') && !flags.includes('ALREADY_PUMPED_15%');
         let reason = "Moderate opportunity.";
-        if (isMatch) reason = "✅ High probability setup detected.";
-        else if (score < 40) reason = `❌ Avoid. Flags: ${flags.join(', ')}`;
+        if (isMatch) reason = "✅ PRIME SETUP DETECTED (High Confidence).";
+        else if (score < 50) reason = `❌ Rejected. Flags: ${flags.join(', ')}`;
 
         // Generate full strategy if it's a match
         let strategy: TradingStrategy | undefined;
@@ -288,20 +286,32 @@ class AiAdvisorService {
             strategy = this.generateTradingStrategy(token);
         }
 
-        // 🤖 AWAIT Gemini AI analysis (now blocking to include in result)
-        console.log(`🔍 Triggering Gemini analysis for ${token.symbol}...`);
-        let geminiAnalysis: GeminiTokenAnalysis | undefined;
-        try {
-            geminiAnalysis = await this.analyzeWithGemini(token);
-            if (geminiAnalysis) {
-                console.log(`🤖 Gemini AI: ${token.symbol} - ${geminiAnalysis.recommendation} (${geminiAnalysis.confidence}% confidence)`);
-                console.log(`   Timing: ${geminiAnalysis.entryTiming}, Risk: ${geminiAnalysis.priceAnalysis.riskLevel}`);
-                console.log(`   Reasoning: ${geminiAnalysis.reasoning}`);
+        // 🤖 AWAIT OpenAI analysis (now blocking to include in result)
+        console.log(`🔍 Triggering OpenAI analysis for ${token.symbol}...`);
+
+        // Ensure OpenAI Key is configured
+        if (!openAIAnalysisService.hasApiKey()) {
+            // Try to load from env or local storage
+            const key = (window as any).OPENAI_API_KEY || localStorage.getItem('OPENAI_API_KEY');
+            if (key) {
+                openAIAnalysisService.setApiKey(key);
             } else {
-                console.log(`⚠️ Gemini returned null for ${token.symbol}`);
+                console.warn("⚠️ OpenAI Key missing. AI Analyst will fail.");
+            }
+        }
+
+        let openAIAnalysis: OpenAITokenAnalysis | null = null;
+        try {
+            openAIAnalysis = await this.analyzeWithOpenAI(token);
+            if (openAIAnalysis) {
+                console.log(`🤖 OpenAI GPT-4: ${token.symbol} - ${openAIAnalysis.recommendation} (${openAIAnalysis.confidenceScore}% confidence)`);
+                console.log(`   Action: ${openAIAnalysis.action}, Risk: ${openAIAnalysis.riskAssessment.riskLevel}`);
+                console.log(`   Rationale: ${openAIAnalysis.rationale}`);
+            } else {
+                console.log(`⚠️ OpenAI returned null for ${token.symbol}`);
             }
         } catch (err) {
-            console.error('❌ Gemini analysis failed (non-critical):', err);
+            console.error('❌ OpenAI analysis failed (non-critical):', err);
         }
 
         return {
@@ -311,28 +321,23 @@ class AiAdvisorService {
             flags,
             timestamp: Date.now(),
             strategy,
-            geminiAnalysis // ✅ Now included in the result!
+            openAIAnalysis // ✅ Now included in the result!
         };
     }
 
     /**
      * 🤖 ASYNC GEMINI AI ANALYSIS
-     * Analyzes token with Gemini AI for intelligent timing insights
-     * This runs in background and doesn't block the main analysis
+     * DEPRECATED for AI Analyst - Reserved for Momentum Hunter
      */
-    public async analyzeWithGemini(token: any): Promise<GeminiTokenAnalysis | null> {
-        try {
-            return await geminiAnalysisService.analyzeToken(token);
-        } catch (error) {
-            console.error('❌ Gemini analysis error:', error);
-            return null;
-        }
+    public async analyzeWithGemini(token: any): Promise<GeminiTokenAnalysis | undefined> {
+        // Disabled for AI Analyst
+        return undefined;
     }
 
     /**
      * 🤖 ASYNC OPENAI AI ANALYSIS
      * Analyzes token with OpenAI GPT-4 for intelligent timing insights
-     * Alternative to Gemini, runs in background
+     * Exclusive for AI Analyst
      */
     public async analyzeWithOpenAI(token: any): Promise<OpenAITokenAnalysis | null> {
         try {
