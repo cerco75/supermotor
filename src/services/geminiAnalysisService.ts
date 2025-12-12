@@ -36,6 +36,13 @@ class GeminiAnalysisService {
     }
 
     /**
+     * Get configured API Key
+     */
+    public getApiKey(): string {
+        return this.apiKey;
+    }
+
+    /**
      * Check if we have requests remaining today
      */
     private canMakeRequest(): boolean {
@@ -54,15 +61,15 @@ class GeminiAnalysisService {
     /**
      * 🧠 Analyze token using Gemini AI
      */
-    public async analyzeToken(token: any): Promise<GeminiTokenAnalysis | null> {
+    public async analyzeToken(token: any): Promise<GeminiTokenAnalysis | undefined> {
         if (!this.apiKey) {
             console.warn('⚠️ Gemini API key not configured. Skipping AI analysis.');
-            return null;
+            return undefined;
         }
 
         if (!this.canMakeRequest()) {
             console.warn('⚠️ Gemini daily request limit reached. Skipping analysis.');
-            return null;
+            return undefined;
         }
 
         try {
@@ -73,7 +80,7 @@ class GeminiAnalysisService {
             return this.parseGeminiResponse(response, token.symbol);
         } catch (error) {
             console.error('❌ Gemini analysis failed:', error);
-            return null;
+            return undefined;
         }
     }
 

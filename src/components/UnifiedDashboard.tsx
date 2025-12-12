@@ -6,6 +6,8 @@ import { momentumRadarService } from '../services/momentumRadarService';
 import { SystemLogsBoard } from './SystemLogsBoard';
 import { NarrativeRadarSection } from './NarrativeRadarSection';
 import { AiAnalystPage } from '../pages/AiAnalystPage';
+import { TurboHunterPage } from '../pages/TurboHunterPage'; // 🚀 CEX Turbo
+import { MomentumHunterPage } from '../pages/MomentumHunterPage';
 import './UnifiedDashboard.css';
 
 export const UnifiedDashboard: React.FC = () => {
@@ -14,7 +16,7 @@ export const UnifiedDashboard: React.FC = () => {
     const [isAutoSearchEnabled, setIsAutoSearchEnabled] = useState(false);
     const [searchStatus, setSearchStatus] = useState<'idle' | 'searching-motor' | 'searching-solana' | 'searching-both'>('idle');
     const [lastSearchTime, setLastSearchTime] = useState<Date | null>(null);
-    const [currentPage, setCurrentPage] = useState<'dashboard' | 'ai-analyst'>('dashboard');
+    const [currentPage, setCurrentPage] = useState<'dashboard' | 'ai-analyst' | 'hunter' | 'turbo'>('dashboard');
 
     useEffect(() => {
         // Initialize and start momentumRadarService on mount
@@ -32,11 +34,13 @@ export const UnifiedDashboard: React.FC = () => {
         initializeServices();
 
         // Cleanup on unmount
+        // Note: We don't stop service as it might be needed by background tasks
         return () => {
-            momentumRadarService.stop();
+            // momentumRadarService.stop(); 
         };
     }, []);
 
+    // ... (rest of search logic same) ...
     // Auto-search effect (every 2 minutes)
     useEffect(() => {
         if (!isAutoSearchEnabled) return;
@@ -111,8 +115,6 @@ export const UnifiedDashboard: React.FC = () => {
     return (
         <div className="unified-dashboard">
             {/* Search Control Panel - now serves as the main nav */}
-
-            {/* Search Control Panel */}
             <div className="search-control-panel">
                 <button
                     className={`search-btn ${isAutoSearchEnabled ? 'active' : ''}`}
@@ -132,24 +134,46 @@ export const UnifiedDashboard: React.FC = () => {
                     className={`search-btn ${currentPage === 'dashboard' ? 'active-page' : ''}`}
                     onClick={() => setCurrentPage('dashboard')}
                 >
-                    📊 Dashboard
+                    📊 Radar
+                </button>
+
+                <button
+                    className={`search-btn ${currentPage === 'hunter' ? 'active-page' : ''}`}
+                    onClick={() => setCurrentPage('hunter')}
+                    style={{ color: '#f59e0b', borderColor: '#f59e0b' }}
+                >
+                    🦁 Hunter
+                </button>
+
+                <button
+                    className={`search-btn ${currentPage === 'turbo' ? 'active-page' : ''}`}
+                    onClick={() => setCurrentPage('turbo')}
+                    style={{ color: '#0ecb81', borderColor: '#0ecb81' }}
+                >
+                    🚀 CEX Turbo
                 </button>
             </div>
 
             <main className="dashboard-content">
-                {currentPage === 'ai-analyst' ? (
-                    <AiAnalystPage />
-                ) : isServiceRunning ? (
-                    <>
-                        <MotorRadarSection onRefresh={handleRefresh} />
-                        <SolanaRadarSection onRefresh={handleRefresh} />
-                        <NarrativeRadarSection />
-                    </>
-                ) : (
-                    <div className="initializing-state">
-                        <div className="spinner"></div>
-                        <p>Initializing services...</p>
-                    </div>
+                {currentPage === 'ai-analyst' && <AiAnalystPage />}
+
+                {currentPage === 'hunter' && <MomentumHunterPage />}
+
+                {currentPage === 'turbo' && <TurboHunterPage />}
+
+                {currentPage === 'dashboard' && (
+                    isServiceRunning ? (
+                        <>
+                            <MotorRadarSection onRefresh={handleRefresh} />
+                            <SolanaRadarSection onRefresh={handleRefresh} />
+                            <NarrativeRadarSection />
+                        </>
+                    ) : (
+                        <div className="initializing-state">
+                            <div className="spinner"></div>
+                            <p>Initializing services...</p>
+                        </div>
+                    )
                 )}
 
                 {/* 📊 SYSTEM LOGS */}

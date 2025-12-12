@@ -14,6 +14,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve Static Frontend (Vite Build)
+app.use(express.static('dist'));
+
 // --- BOT SETUP ---
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 const activeChats = new Set();
@@ -34,9 +37,8 @@ try {
 
 // --- API ROUTES ---
 
-// 1. Get Gem History (App calls this on wake up)
+// 1. Get Gem History
 app.get('/history', (req, res) => {
-    // Return last 50 gems
     const recent = history.slice(-50).reverse();
     res.json({
         ok: true,
@@ -45,9 +47,9 @@ app.get('/history', (req, res) => {
     });
 });
 
-// 2. Health Check
-app.get('/', (req, res) => {
-    res.send('🦁 Motor Radar Brain is Active. /history to sync.');
+// 2. Health Check (API)
+app.get('/health', (req, res) => {
+    res.send('🦁 Motor Radar Brain is Active.');
 });
 
 // --- BOT LOGIC ---
@@ -128,9 +130,119 @@ function broadcastAlert(token, isNew = true) {
     activeChats.forEach(id => bot.sendMessage(id, message));
 }
 
+// --- BINANCE HUNTER ENGINE (CEX) ---
+async function scanBinance() {
+    try {
+        console.log("🦁🚀 CEX Turbo: Scanning Binance Top Gainers...");
+
+        // 1. Get Top Gainers
+        const tickerRes = await axios.get('https://api.binance.com/api/v3/ticker/24hr');
+        const gainers = tickerRes.data
+            .filter(t => t.symbol.endsWith('USDT') && parseFloat(t.quoteVolume) > 5000000) // >$5M Vol
+            .sort((a, b) => parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent))
+            .slice(0, 10);
+
+        for (const coin of gainers) {
+            await analyzeBinancePair(coin);
+            // Small delay to be polite
+            await new Promise(r => setTimeout(r, 500));
+        }
+
+    } catch (error) {
+        console.error("Binance Scan Error:", error.message);
+    }
+}
+
+async function analyzeBinancePair(ticker) {
+    try {
+        // 2. Fetch Candles (1m) for technicals
+        const klinesRes = await axios.get(`https://api.binance.com/api/v3/klines?symbol=${ticker.symbol}&interval=1m&limit=30`);
+        const candles = klinesRes.data;
+        if (!candles || candles.length < 20) return;
+
+        const closes = candles.map(k => parseFloat(k[4]));
+
+        // 3. Calc Technicals
+        const rsi = calculateRSI(closes, 14);
+        const { macdSignal } = calculateMACD(closes);
+
+        // 4. HUNTER LOGIC
+        // We look for OVERSOLD DIP in a UPTREND (Turbo Scalp)
+        // OR Strong Breakout
+
+        let signal = null;
+
+        // Strategy A: RSI Oversold (< 30) -> Buy the Dip
+        if (rsi < 30) {
+            signal = "🟢 REBOTE (Oversold)";
+        }
+        // Strategy B: MACD Flip Bullish + RSI healthy
+        else if (macdSignal === 'BULLISH' && rsi > 40 && rsi < 70) {
+            // Check if it JUST flipped? Hard without history state. 
+            // We'll just alert strong momentum.
+            // signal = "🚀 IMPULSO (Momentum)"; 
+            // Reduced noise: Only alert Oversold for now in bot
+        }
+
+        if (signal) {
+            const alertMsg = `
+🚀 **BINANCE TURBO** 🚀
+💎 **${ticker.symbol.replace('USDT', '')}**
+💰 $${parseFloat(ticker.lastPrice).toFixed(4)}
+📊 RSI: ${rsi.toFixed(1)} | ${signal}
+📈 24h: ${ticker.priceChangePercent}%
+            `;
+            // Deduplicate logic simpler: Just log for now to avoid spamming user while testing
+            // broadcastAlert({ symbol: ticker.symbol, ...ticker }, false); // Use carefully
+
+            // Only alert if we haven't spammed this token recently?
+            // For now, let's just log it to console as "Found"
+            console.log(`Bingo! ${ticker.symbol} - ${signal}`);
+
+            // OPTIONAL: Send to Telegram
+            activeChats.forEach(id => bot.sendMessage(id, alertMsg));
+        }
+
+    } catch (e) {
+        // ignore individual pair errors
+    }
+}
+
+// Helpers
+function calculateRSI(prices, period = 14) {
+    if (prices.length < period + 1) return 50;
+    let gains = 0, losses = 0;
+    for (let i = 1; i <= period; i++) {
+        const diff = prices[prices.length - i] - prices[prices.length - i - 1];
+        if (diff >= 0) gains += diff;
+        else losses += Math.abs(diff);
+    }
+    if (losses === 0) return 100;
+    const rs = gains / losses;
+    return 100 - (100 / (1 + rs));
+}
+
+function calculateMACD(prices) {
+    const ema12 = calcEMA(prices, 12);
+    const ema26 = calcEMA(prices, 26);
+    const macdLine = ema12 - ema26;
+    return { macdSignal: macdLine > 0 ? 'BULLISH' : 'BEARISH' };
+}
+
+function calcEMA(prices, period) {
+    const k = 2 / (period + 1);
+    let ema = prices[0];
+    for (let i = 1; i < prices.length; i++) {
+        ema = prices[i] * k + ema * (1 - k);
+    }
+    return ema;
+}
+
 // --- START ---
-setInterval(scanSolana, 60000);
+setInterval(scanSolana, 60000); // DexScreener every 60s
+setInterval(scanBinance, 30000); // Binance Turbo every 30s
 scanSolana();
+scanBinance();
 
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
